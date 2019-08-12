@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import Card from '@material-ui/core/Card';
+import Box from '@material-ui/core/Box';
 import CardContent from '@material-ui/core/CardContent';
 const boardElements = ["名前","出勤","休憩","退勤"];
 var useStyles = makeStyles({
@@ -26,63 +27,57 @@ var useStyles = makeStyles({
 // }
 
 function RenderBoard (props) {
-  return <GridList cols={4}>{props.boardData}</GridList>
+  return (
+    <Box display="flex" justifyContent="center" >
+        {props.boardData}
+    </Box>
+  )
+
 }
 function createBoardData (personList) {
-  var cardColorA = {};
-  var cardColorB = {};
-  var cardColorC = {};
+  const defaultProps = {
+    bgcolor: 'background.paper',
+    m: 1,
+    border: 1,
+    style: { width: '5rem', height: '5rem' },
+  };
+  var cardColorA = "";
+  var cardColorB = "";
+  var cardColorC = "";
 
   var boardData = [];
   personList.map( (val, idx) => {
     switch(val.state) {
       case "出勤" :
-        cardColorA.backgroundColor = '#FF0000';
-        cardColorB.backgroundColor = '#FFFFFF';
-        cardColorC.backgroundColor = '#FFFFFF';
+        cardColorA = 'secondary.main';
+        cardColorB = 'text.primary';
+        cardColorC = 'text.primary';
         break;
       case "休憩" :
-        cardColorA.backgroundColor = '#FFFFFF';
-        cardColorB.backgroundColor = '#FF0000';
-        cardColorC.backgroundColor = '#FFFFFF';
+        cardColorA = 'text.primary';
+        cardColorB = 'secondary.main';
+        cardColorC = 'text.primary';
         break;
       case "退勤" :
-        cardColorA.backgroundColor = '#FFFFFF';
-        cardColorB.backgroundColor = '#FFFFFF';
-        cardColorC.backgroundColor = '#FF0000';
+        cardColorA = 'text.primary';
+        cardColorB = 'text.primary';
+        cardColorC = 'secondary.main';
         break;
       default :
         console.log("error");
     }
     boardData.push(
-      <GridListTile>
-        <Card >
-          <CardContent><Typography>{val.name}</Typography></CardContent>
-        </Card>
-      </GridListTile>
+        <Box {...defaultProps}>{val.name}</Box>
     );
     boardData.push(
-      <GridListTile>
-        <Card style={cardColorA}>
-          <CardContent>
-          <Typography>B</Typography>
-          </CardContent>
-        </Card>
-      </GridListTile>
+      <Box borderColor={cardColorA} {...defaultProps} />
     );
     boardData.push(
-      <GridListTile>
-        <Card className={cardColorB}>
-          <CardContent><Typography>B</Typography></CardContent>
-        </Card>
-      </GridListTile>
+      <Box borderColor={cardColorB} {...defaultProps} />
     );
     boardData.push(
-      <GridListTile>
-        <Card className={cardColorC}>
-          <CardContent><Typography>C</Typography></CardContent>
-        </Card>
-      </GridListTile>
+        <Box borderColor={cardColorC} {...defaultProps} />
+
     );
   });
   return boardData;
@@ -108,9 +103,7 @@ function Board(props) {
           )
         }
       </GridList>
-      <div className={classes.cardList}>
-        <RenderBoard  boardData={boardData}/>
-      </div>
+      <RenderBoard boardData={boardData}/>
     </div>
   );
 
